@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MaskNotifier</string>
+    <string name="title_1">Why wear masks?</string>
+    <string name="description_1">Wearing a face mask will help prevent the spread of infection and prevent the individual from contracting any airborne infectious germs.</string>
+    <string name="title_2">Do you forget?</string>
+    <string name="description_2">Face masks are part of an infection control strategy to eliminate cross-contamination. However it is quite common to forget.</string>
+    <string name="title_3">We got you covered!</string>
+    <string name="description_3">Mask Notifier will use Geo-fencing to notify you to wear mask, every time you move out of your territory.</string>
+    <string name="title_activity_maps">Map</string>
+</resources>
