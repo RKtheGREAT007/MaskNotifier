@@ -7,6 +7,46 @@
     tools:context=".MainActivity"
     android:background="@color/colorPrimaryLight">
 
+    <ImageView
+        android:layout_width="317dp"
+        android:layout_height="642dp"
+        android:layout_marginBottom="224dp"
+        android:paddingTop="12dp"
+        android:src="@drawable/family"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:text="Welcome!"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.462" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Press button below to proceed"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18dp"
+        android:paddingLeft="16dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        app:layout_constraintVertical_bias="0.0" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
@@ -29,7 +69,7 @@
                 android:layout_height="wrap_content"
                 android:text="Why wear masks?"
                 android:textColor="@android:color/white"
-                android:textSize="30sp"
+                android:textSize="34sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.235"
@@ -98,23 +138,23 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.669"
+        app:layout_constraintVertical_bias="0.641"
         app:srcCompat="@drawable/ic_baseline_arrow_forward_24" />
 
     <Button
+        android:id="@+id/set_geo_fence_button"
         android:layout_width="153dp"
         android:layout_height="55dp"
         android:background="@drawable/button_background"
-        android:text="Set Geo-Fence"
-        android:textSize="18sp"
         android:padding="4dp"
-        android:id="@+id/set_geo_fence_button"
+        android:text="Set Geo-Fence"
         android:visibility="gone"
         android:textColor="@android:color/white"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.668" />
+        app:layout_constraintVertical_bias="0.642" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 
