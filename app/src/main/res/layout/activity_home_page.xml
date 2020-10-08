@@ -43,7 +43,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.612" />
+        app:layout_constraintVertical_bias="0.748" />
 
     <Button
         android:id="@+id/see_history_button"
@@ -61,12 +61,12 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/instructions_button"
+        android:id="@+id/about_mask_notifier_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:background="@drawable/button_background"
-        android:text="Instructions"
+        android:text="About Mask Notifier"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -75,19 +75,19 @@
         app:layout_constraintTop_toBottomOf="@+id/see_history_button"
         app:layout_constraintVertical_bias="0.0" />
 
-    <Button
-        android:id="@+id/about_us_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_background"
-        android:text="About us"
-        android:layout_marginTop="24dp"
-        android:textColor="@android:color/white"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructions_button"
-        app:layout_constraintVertical_bias="0.0" />
+<!--    <Button-->
+<!--        android:id="@+id/about_us_button"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/button_background"-->
+<!--        android:text="About us"-->
+<!--        android:layout_marginTop="24dp"-->
+<!--        android:textColor="@android:color/white"-->
+<!--        android:textSize="24sp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/about_mask_notifier_button"-->
+<!--        app:layout_constraintVertical_bias="0.0" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

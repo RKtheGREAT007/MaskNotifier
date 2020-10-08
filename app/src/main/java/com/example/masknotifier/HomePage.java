@@ -33,7 +33,7 @@ import java.util.List;
 
 public class HomePage extends AppCompatActivity implements View.OnClickListener {
 
-    private Button instructionsButton, historyButton, aboutButton, editGeoFenceButton;
+    private Button historyButton, aboutButton, editGeoFenceButton;
     private double latitude, longitude, radius;
     private static String TAG = "HomePage";
 
@@ -43,12 +43,10 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
 
-        instructionsButton = findViewById(R.id.instructions_button);
         historyButton = findViewById(R.id.see_history_button);
-        aboutButton = findViewById(R.id.about_us_button);
+        aboutButton = findViewById(R.id.about_mask_notifier_button);
         editGeoFenceButton = findViewById(R.id.edit_geo_fence_button);
 
-        instructionsButton.setOnClickListener(this);
         historyButton.setOnClickListener(this);
         aboutButton.setOnClickListener(this);
         editGeoFenceButton.setOnClickListener(this);
@@ -58,11 +56,8 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     @Override
     public void onClick(View view) {
         switch (view.getId()){
-            case R.id.instructions_button:
-                //Todo: goto to instructions page
-                break;
-            case R.id.about_us_button:
-                //Todo: goto about us page
+            case R.id.about_mask_notifier_button:
+                startActivity(new Intent(this, About.class));
                 break;
             case R.id.edit_geo_fence_button:
                 startActivity(new Intent(this, MapsActivity.class));

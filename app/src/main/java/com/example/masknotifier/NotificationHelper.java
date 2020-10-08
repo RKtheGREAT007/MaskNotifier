@@ -19,6 +19,7 @@ import java.util.Random;
 public class NotificationHelper extends ContextWrapper {
 
     private static final String TAG = "NotificationHelper";
+    private static final int ID = 1000;
 
     public NotificationHelper(Context base) {
         super(base);
@@ -53,11 +54,19 @@ public class NotificationHelper extends ContextWrapper {
                 .setStyle(new NotificationCompat.BigTextStyle().setSummaryText("summary").setBigContentTitle(title).bigText(body))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
+                .addAction(R.drawable.ic_launcher_background, "quit_action", makePendingIntent("quit_action"))
                 .build();
 
-        NotificationManagerCompat.from(this).notify(new Random().nextInt(), notification);
+        NotificationManagerCompat.from(this).notify(ID, notification);
 
 
+    }
+
+    public PendingIntent makePendingIntent(String name) {
+        Intent intent = new Intent(this, NotificationBroadcastReceiver.class);
+        intent.setAction(name);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        return pendingIntent;
     }
 
 }

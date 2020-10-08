@@ -8,7 +8,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -20,7 +20,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HomePage"></activity>
+        <activity android:name=".SignUp" />
+        <activity android:name=".About" />
+        <activity android:name=".HomePage" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -29,13 +31,19 @@
              sign the APK for publishing.
              You can define the keys for the debug and release targets in src/debug/ and src/release/.
         -->
-
         <receiver
             android:name=".GeofenceBroadcastReceiver"
             android:allowBackup="true"
             android:directBootAware="true"
             android:enabled="true"
-            android:exported="false"/>
+            android:exported="false" />
+
+        <receiver
+            android:name=".NotificationBroadcastReceiver"
+            android:allowBackup="true"
+            android:directBootAware="true"
+            android:enabled="true"
+            android:exported="false" />
 
         <meta-data
             android:name="com.google.android.gms.version"
