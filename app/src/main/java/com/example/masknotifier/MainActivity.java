@@ -16,7 +16,7 @@ import static android.view.View.GONE;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageButton nextButton, prevButton;
-    private Button setGeoFenceButton;
+    private Button signUpButton;
     private FloatingActionButton fab;
     private TextView titleTextView, descriptionTextView;
     private int currentPage = 0;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         nextButton = findViewById(R.id.next_button);
         prevButton = findViewById(R.id.previous_button);
-        setGeoFenceButton = findViewById(R.id.set_geo_fence_button);
+        signUpButton = findViewById(R.id.sign_up_button);
         fab = findViewById(R.id.fab_next);
         titleTextView = findViewById(R.id.title_textView);
         descriptionTextView = findViewById(R.id.description_textView);
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         description[2] = R.string.description_3;
         nextButton.setOnClickListener(this);
         prevButton.setOnClickListener(this);
-        setGeoFenceButton.setOnClickListener(this);
+        signUpButton.setOnClickListener(this);
         fab.setOnClickListener(this);
     }
 
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(currentPage==2){
                     nextButton.setVisibility(GONE);
                     fab.setVisibility(GONE);
-                    setGeoFenceButton.setVisibility(View.VISIBLE);
+                    signUpButton.setVisibility(View.VISIBLE);
                 }
                 else if(currentPage==1){
                     prevButton.setVisibility(View.VISIBLE);
@@ -71,14 +71,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 currentPage--;
                 if(currentPage==1){
                     nextButton.setVisibility(View.VISIBLE);
-                    setGeoFenceButton.setVisibility(GONE);
+                    signUpButton.setVisibility(GONE);
                     fab.setVisibility(View.VISIBLE);
                 }
                 else if(currentPage==0){
                     prevButton.setVisibility(GONE);
                 }
                 break;
-            case R.id.set_geo_fence_button:
+            case R.id.sign_up_button:
                 //todo: goto next activity
                 startActivity(new Intent(this, SignUp.class));
                 break;

@@ -43,8 +43,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +63,10 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     private GoogleMap mMap;
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
+
+    private FirebaseAuth mAuth;
+    private FirebaseUser currentUser;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     private double GEOFENCE_RADIUS = 0;
     private String GEOFENCE_ID = "SOME_GEOFENCE_ID";
@@ -82,6 +90,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         geofencingClient = LocationServices.getGeofencingClient(this);
         geofenceHelper = new GeofenceHelper(this);
 
+        mAuth = FirebaseAuth.getInstance();
 
         continueButton.setOnClickListener(this);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -102,24 +111,36 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
 
-                LatLng latLng = new LatLng(latitude, longitude);
-                GEOFENCE_RADIUS = (double) progress * 1.5;
+                if(latitude == 0 && longitude == 0){
+                    Toast.makeText(MapsActivity.this, "Select a point first by tapping on map!", Toast.LENGTH_SHORT).show();
+                    seekBar.setProgress(0);
+                }
+                else{
+                    LatLng latLng = new LatLng(latitude, longitude);
+                    GEOFENCE_RADIUS = (double) progress * 1.5;
 
-                radiusTextView.setText("Radius: " + GEOFENCE_RADIUS);
+                    radiusTextView.setText("Radius: " + GEOFENCE_RADIUS);
 
-                if (Build.VERSION.SDK_INT >= 29) {
-                    if (ContextCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                        handleMapClick(latLng);
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        if (ContextCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                            handleMapClick(latLng);
+                        } else {
+                            ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_ACCESS_REQUEST_CODE);
+                        }
+
                     } else {
-                        ActivityCompat.requestPermissions(MapsActivity.this, new String[] {Manifest.permission.ACCESS_BACKGROUND_LOCATION}, BACKGROUND_LOCATION_ACCESS_REQUEST_CODE);
+                        handleMapClick(latLng);
                     }
-
-                } else {
-                    handleMapClick(latLng);
                 }
 
             }
         });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        currentUser = mAuth.getCurrentUser();
     }
 
     private void handleMapClick(LatLng latLng){
@@ -169,10 +190,6 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     public void onMapReady(GoogleMap map) {
         mMap = map;
 
-        // Add a marker in Sydney and move the camera
-        LatLng eiffel = new LatLng(48.8589, 2.29365);
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eiffel, 16));
-
         enableUserLocation();
 
         mMap.setOnMapClickListener(this);
@@ -200,21 +217,17 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == FINE_LOCATION_ACCESS_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //We have the permission
                 mMap.setMyLocationEnabled(true);
             } else {
-                //We do not have the permission..
-
+                Toast.makeText(this, "Fine loaction access permission is required to access your location!", Toast.LENGTH_SHORT).show();
             }
         }
 
         if (requestCode == BACKGROUND_LOCATION_ACCESS_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //We have the permission
                 handleMapClick(new LatLng(latitude, longitude));
             } else {
-                //We do not have the permission..
-                Toast.makeText(this, "Background location access is neccessary for geofences to trigger...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Background location access is neccessary for geofences to trigger!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -227,9 +240,26 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
                     Toast.makeText(geofenceHelper, "Set the Geofence to continue", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    addGeofence(new LatLng(latitude, longitude), GEOFENCE_RADIUS);
-                    Intent intent = new Intent(this, HomePage.class);
-                    startActivity(intent);
+                    Map<String, Object> pointObj = new HashMap<>();
+                    pointObj.put("latitude", latitude);
+                    pointObj.put("longitude", longitude);
+                    db.collection("userPoints")
+                            .document(currentUser.getUid())
+                            .set(pointObj)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    addGeofence(new LatLng(latitude, longitude), GEOFENCE_RADIUS);
+                                    Intent intent = new Intent(MapsActivity.this, HomePage.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(MapsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
                 break;
         }

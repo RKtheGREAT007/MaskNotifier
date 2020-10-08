@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -20,6 +21,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,30 +78,23 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                 if(task.isSuccessful()){
                                     Log.d(TAG, "onComplete: Sign Up successful");
                                     currentUser = mAuth.getCurrentUser();
-                                    user = User.getInstance();
-                                    user.setEmail(emailText);
-                                    user.setPassword(passwordText);
-                                    user.setTimeStamp(Calendar.getInstance().getTime().toString());
-
-//                                    Map<String, Object> userObj = new HashMap<>();
-//                                    userObj.put("email", emailText);
-//
-//                                    db.collection("users")
-//                                            .add(userObj)
-//                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                                @Override
-//                                                public void onSuccess(DocumentReference documentReference) {
-//                                                    Log.d(TAG, "onSuccess: user added");
-//                                                }
-//                                            })
-//                                            .addOnFailureListener(new OnFailureListener() {
-//                                                @Override
-//                                                public void onFailure(@NonNull Exception e) {
-//                                                    Log.d(TAG, "onFailure: " + e.getMessage());
-//                                                }
-//                                            });
-
-                                    startActivity(new Intent(SignUp.this, MapsActivity.class));
+                                    Map<String, Object> obj = new HashMap<>();
+                                    obj.put("index",0);
+                                    db.collection("userHistory")
+                                            .document(currentUser.getUid())
+                                            .set(obj)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    startActivity(new Intent(SignUp.this, MapsActivity.class));
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(SignUp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
                                 }
                                 else{
                                     Log.d(TAG, "onComplete: " + task.getException());

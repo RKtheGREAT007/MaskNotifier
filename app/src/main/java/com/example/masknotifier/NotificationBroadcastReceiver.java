@@ -9,11 +9,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Calendar;
@@ -39,23 +41,34 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
         Log.d(TAG, "onReceive: " + currentUser.getEmail());
 
         if ("quit_action".equals(whichAction)) {
-            Map<String, Object> obj = new HashMap<>();
-            obj.put("reply", "yes");
-            obj.put("timeStamp", Calendar.getInstance().getTime().toString());
             db.collection("userHistory")
                     .document(currentUser.getUid())
-                    .set(obj)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    .get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
-                        public void onSuccess(Void aVoid) {
-                            Toast.makeText(context, "Reply noted", Toast.LENGTH_SHORT).show();
-                            NotificationManagerCompat.from(context).cancel(1000);
-                        }
-                    })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Log.d(TAG, "onFailure: " + e.getMessage());
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Map<String, Object> mp = documentSnapshot.getData();
+                            int index = Integer.parseInt((String) Objects.requireNonNull(mp.get("index")));
+                            Map<String, Object> obj = new HashMap<>();
+                            obj.put("reply" + String.valueOf(index), "yes");
+                            obj.put("timeStamp" + String.valueOf(index), Calendar.getInstance().getTime().toString());
+                            obj.put("index", String.valueOf(index+1));
+                            db.collection("userHistory")
+                                    .document(currentUser.getUid())
+                                    .update(obj)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(context, "Reply noted", Toast.LENGTH_SHORT).show();
+                                            NotificationManagerCompat.from(context).cancel(1000);
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.d(TAG, "onFailure: " + e.getMessage());
+                                        }
+                                    });
                         }
                     });
         }
