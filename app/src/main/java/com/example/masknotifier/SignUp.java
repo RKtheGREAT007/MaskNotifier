@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.masknotifier.model.UserDetails;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,7 +34,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "SignUp";
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-    private User user;
     private EditText email,password,confirmPassword;
     private Button signUp;
 
@@ -60,6 +60,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         super.onStart();
         currentUser = mAuth.getCurrentUser();
         if(currentUser != null) {
+            UserDetails userInstance = UserDetails.getUserInstance();
+            userInstance.setUid(currentUser.getUid());
             startActivity(new Intent(this, MapsActivity.class));
         }
     }
@@ -78,8 +80,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                 if(task.isSuccessful()){
                                     Log.d(TAG, "onComplete: Sign Up successful");
                                     currentUser = mAuth.getCurrentUser();
+
+                                    UserDetails userInstance = UserDetails.getUserInstance();
+                                    userInstance.setUid(currentUser.getUid());
+
                                     Map<String, Object> obj = new HashMap<>();
-                                    obj.put("index",0);
+                                    obj.put("index","0");
                                     db.collection("userHistory")
                                             .document(currentUser.getUid())
                                             .set(obj)

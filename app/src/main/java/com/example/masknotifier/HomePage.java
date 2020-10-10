@@ -63,7 +63,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
                 startActivity(new Intent(this, MapsActivity.class));
                 break;
             case R.id.see_history_button:
-                //Todo: goto history page
+                startActivity(new Intent(this, HistoryPage.class));
                 break;
         }
     }

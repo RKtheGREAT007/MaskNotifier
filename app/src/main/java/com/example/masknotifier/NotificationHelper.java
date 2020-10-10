@@ -54,7 +54,8 @@ public class NotificationHelper extends ContextWrapper {
                 .setStyle(new NotificationCompat.BigTextStyle().setSummaryText("summary").setBigContentTitle(title).bigText(body))
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-                .addAction(R.drawable.ic_launcher_background, "quit_action", makePendingIntent("quit_action"))
+                .addAction(R.drawable.ic_launcher_background, "forgot", makePendingIntent("forgot"))
+                .addAction(R.drawable.ic_launcher_background, "okay", makePendingIntent("okay"))
                 .build();
 
         NotificationManagerCompat.from(this).notify(ID, notification);

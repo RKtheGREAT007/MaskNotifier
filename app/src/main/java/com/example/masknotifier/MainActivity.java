@@ -9,11 +9,15 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.example.masknotifier.model.UserDetails;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
 
 import static android.view.View.GONE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private FirebaseAuth mAuth;
 
     private ImageButton nextButton, prevButton;
     private Button signUpButton;
@@ -27,6 +31,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mAuth = FirebaseAuth.getInstance();
 
         nextButton = findViewById(R.id.next_button);
         prevButton = findViewById(R.id.previous_button);
@@ -85,4 +91,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(mAuth.getCurrentUser()!=null){
+            UserDetails userDetails = UserDetails.getUserInstance();
+            userDetails.setUid(mAuth.getCurrentUser().getUid());
+            startActivity(new Intent(this, HomePage.class));
+        }
+    }
 }

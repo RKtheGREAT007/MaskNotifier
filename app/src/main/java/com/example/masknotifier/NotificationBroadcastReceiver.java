@@ -32,7 +32,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        String whichAction = intent.getAction();
+        final String whichAction = intent.getAction();
 
         mAuth = FirebaseAuth.getInstance();
 
@@ -40,7 +40,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
 
         Log.d(TAG, "onReceive: " + currentUser.getEmail());
 
-        if ("quit_action".equals(whichAction)) {
+        if ("okay".equals(whichAction)||"forgot".equals(whichAction)) {
             db.collection("userHistory")
                     .document(currentUser.getUid())
                     .get()
@@ -50,7 +50,12 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                             Map<String, Object> mp = documentSnapshot.getData();
                             int index = Integer.parseInt((String) Objects.requireNonNull(mp.get("index")));
                             Map<String, Object> obj = new HashMap<>();
-                            obj.put("reply" + String.valueOf(index), "yes");
+                            if("okay".equals(whichAction)) {
+                                obj.put("reply" + String.valueOf(index), "yes");
+                            }
+                            else{
+                                obj.put("reply" + String.valueOf(index), "no");
+                            }
                             obj.put("timeStamp" + String.valueOf(index), Calendar.getInstance().getTime().toString());
                             obj.put("index", String.valueOf(index+1));
                             db.collection("userHistory")

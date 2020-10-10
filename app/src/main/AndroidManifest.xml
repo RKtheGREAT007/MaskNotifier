@@ -20,6 +20,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".HistoryPage"></activity>
         <activity android:name=".SignUp" />
         <activity android:name=".About" />
         <activity android:name=".HomePage" />
@@ -37,7 +38,6 @@
             android:directBootAware="true"
             android:enabled="true"
             android:exported="false" />
-
         <receiver
             android:name=".NotificationBroadcastReceiver"
             android:allowBackup="true"
