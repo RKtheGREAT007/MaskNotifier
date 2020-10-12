@@ -20,7 +20,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".HistoryPage"></activity>
+        <activity android:name=".LogIn"></activity>
+        <activity android:name=".HistoryPage" />
         <activity android:name=".SignUp" />
         <activity android:name=".About" />
         <activity android:name=".HomePage" />

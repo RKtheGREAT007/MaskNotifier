@@ -19,13 +19,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +30,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private EditText email,password,confirmPassword;
-    private Button signUp;
+    private Button signUp, logIn;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -50,9 +45,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         password = findViewById(R.id.new_password_editText);
         confirmPassword = findViewById(R.id.confirm_password_editText);
         signUp = findViewById(R.id.sign_up_buton);
+        logIn = findViewById(R.id.sign_up_login_buton);
 
         signUp.setOnClickListener(this);
-
+        logIn.setOnClickListener(this);
     }
 
     @Override
@@ -108,6 +104,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             }
                         });
             }
+        }
+        else{
+            startActivity(new Intent(SignUp.this, LogIn.class));
         }
     }
 }
