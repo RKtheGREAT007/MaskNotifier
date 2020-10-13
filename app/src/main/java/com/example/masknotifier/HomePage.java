@@ -30,6 +30,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HomePage extends AppCompatActivity implements View.OnClickListener {
 
@@ -42,6 +43,7 @@ public class HomePage extends AppCompatActivity implements View.OnClickListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        Objects.requireNonNull(this.getSupportActionBar()).hide();
 
         historyButton = findViewById(R.id.see_history_button);
         aboutButton = findViewById(R.id.about_mask_notifier_button);

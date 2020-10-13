@@ -51,10 +51,10 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                             int index = Integer.parseInt((String) Objects.requireNonNull(mp.get("index")));
                             Map<String, Object> obj = new HashMap<>();
                             if("okay".equals(whichAction)) {
-                                obj.put("reply" + String.valueOf(index), "yes");
+                                obj.put("reply" + String.valueOf(index), "Remembered");
                             }
                             else{
-                                obj.put("reply" + String.valueOf(index), "no");
+                                obj.put("reply" + String.valueOf(index), "Forgot");
                             }
                             obj.put("timeStamp" + String.valueOf(index), Calendar.getInstance().getTime().toString());
                             obj.put("index", String.valueOf(index+1));

@@ -51,6 +51,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, OnMapReadyCallback, View.OnClickListener {
 
@@ -119,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
                     LatLng latLng = new LatLng(latitude, longitude);
                     GEOFENCE_RADIUS = (double) progress * 1.5;
 
-                    radiusTextView.setText("Radius: " + GEOFENCE_RADIUS);
+                    radiusTextView.setText("Radius: " + GEOFENCE_RADIUS + "m");
 
                     if (Build.VERSION.SDK_INT >= 29) {
                         if (ContextCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_GRANTED) {

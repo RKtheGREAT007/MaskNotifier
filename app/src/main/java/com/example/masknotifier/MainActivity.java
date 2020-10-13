@@ -13,6 +13,8 @@ import com.example.masknotifier.model.UserDetails;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 import static android.view.View.GONE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Objects.requireNonNull(this.getSupportActionBar()).hide();
 
         mAuth = FirebaseAuth.getInstance();
 

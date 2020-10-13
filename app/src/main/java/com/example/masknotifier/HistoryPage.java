@@ -22,6 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class HistoryPage extends AppCompatActivity {
 
@@ -37,6 +38,7 @@ public class HistoryPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history_page);
+        Objects.requireNonNull(this.getSupportActionBar()).hide();
 
         recyclerView = findViewById(R.id.history_recyclerView);
         recyclerView.setHasFixedSize(true);

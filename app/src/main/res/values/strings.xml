@@ -7,10 +7,9 @@
     <string name="title_3">We got you covered!</string>
     <string name="description_3">Mask Notifier will use Geo-fencing to notify you to wear mask, every time you move out of your territory.</string>
     <string name="title_activity_maps">Map</string>
-    <string name="coronaLink"><a href="https://www.google.com/">Tap here to open Link</a></string>
     <string name="steps">
-                            \n&#8226;Set Geofence of some radius.This Geofence area will be your territory.\n
-                            \n&#8226;You will be notified whenever you enter or leave your territory.Reply notifications by tapping on them.\n
-    \n&#8226;In history page you will be able to see your last few responses to the notifications.\n
-        \n&#8226;You can always edit your territory by tapping to edit geofence button.\n</string>
+        \n&#8226;After a small walkthrough, you are requested to set a Geo-Fence. Where a marker appears on the map at your current location with a predefined radius. You can adjust this radius to fit the surroundings of your home.\n
+        \n&#8226;Next, you will move on to the dashboard.\n
+        \n&#8226;So, using GeoFence you provided, every time you walk out of your home territory, you will get a notification to wear a mask. Also, all these notifications will be saved under the notifications section in the dashboard.\n
+        \n&#8226;Finally, you can edit your GeoFence anytime you need, from the dashboard itself. All these transactions will be taken place within the user’s local device there is no issue with privacy.</string>
 </resources>

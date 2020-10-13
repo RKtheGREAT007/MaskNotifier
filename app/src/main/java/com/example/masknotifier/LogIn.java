@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
     private FirebaseAuth mAuth;
@@ -28,6 +30,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+        Objects.requireNonNull(this.getSupportActionBar()).hide();
 
         mAuth = FirebaseAuth.getInstance();
 
