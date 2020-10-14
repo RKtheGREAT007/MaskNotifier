@@ -167,13 +167,14 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         String errorMessage = geofenceHelper.getErrorString(e);
-                        Log.d(TAG, "onFailure: " + errorMessage);
+                        Toast.makeText(MapsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
     private void addMarker(LatLng latLng){
         MarkerOptions markerOptions = new MarkerOptions().position(latLng);
+        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
         mMap.addMarker(markerOptions);
     }
 
@@ -181,8 +182,8 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         CircleOptions circleOptions = new CircleOptions();
         circleOptions.center(latLng);
         circleOptions.radius(radius);
-        circleOptions.strokeColor(Color.argb(255, 255, 0,0));
-        circleOptions.fillColor(Color.argb(64, 255, 0,0));
+        circleOptions.strokeColor(Color.argb(255, 0, 0,255));
+        circleOptions.fillColor(Color.argb(64, 0, 0,255));
         circleOptions.strokeWidth(4);
         mMap.addCircle(circleOptions);
     }
@@ -193,6 +194,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
 
         enableUserLocation();
 
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(21.5077, 70.4562), 16));
         mMap.setOnMapClickListener(this);
     }
 
@@ -206,7 +208,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
 
     @Override
     public void onMapClick(LatLng latLng) {
-        Log.d(TAG, "tapped, latLng = " + latLng);
+//        Log.d(TAG, "tapped, latLng = " + latLng);
         mMap.clear();
         latitude = latLng.latitude;
         longitude = latLng.longitude;
@@ -253,6 +255,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
                                     addGeofence(new LatLng(latitude, longitude), GEOFENCE_RADIUS);
                                     Intent intent = new Intent(MapsActivity.this, HomePage.class);
                                     startActivity(intent);
+                                    finish();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {

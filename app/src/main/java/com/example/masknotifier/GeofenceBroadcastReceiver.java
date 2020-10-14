@@ -39,12 +39,12 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
 
         switch (transitionType) {
             case Geofence.GEOFENCE_TRANSITION_ENTER:
-                Toast.makeText(context, "GEOFENCE_TRANSITION_ENTER", Toast.LENGTH_SHORT).show();
-                notificationHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_ENTER", "", MapsActivity.class);
+                Toast.makeText(context, "You entered your home territory!", Toast.LENGTH_SHORT).show();
+                notificationHelper.sendHighPriorityNotification("You entered your home territory!", "", MapsActivity.class);
                 break;
             case Geofence.GEOFENCE_TRANSITION_EXIT:
-                Toast.makeText(context, "GEOFENCE_TRANSITION_EXIT", Toast.LENGTH_SHORT).show();
-                notificationHelper.sendHighPriorityNotification("GEOFENCE_TRANSITION_EXIT", "", MapsActivity.class);
+                Toast.makeText(context, "You left your home territory! Did you wore the mask?", Toast.LENGTH_SHORT).show();
+                notificationHelper.sendHighPriorityNotification("You left your home territory! Did you wore the mask?", "", MapsActivity.class);
                 break;
         }
 

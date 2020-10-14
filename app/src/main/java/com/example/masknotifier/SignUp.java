@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.masknotifier.model.UserDetails;
@@ -32,6 +33,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private FirebaseUser currentUser;
     private EditText email,password,confirmPassword;
     private Button signUp, logIn;
+    private ProgressBar progressBar;
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
@@ -43,6 +45,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         mAuth = FirebaseAuth.getInstance();
 
+        progressBar = findViewById(R.id.sign_up_progress_bar);
         email = findViewById(R.id.email_editText);
         password = findViewById(R.id.new_password_editText);
         confirmPassword = findViewById(R.id.confirm_password_editText);
@@ -61,6 +64,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             UserDetails userInstance = UserDetails.getUserInstance();
             userInstance.setUid(currentUser.getUid());
             startActivity(new Intent(this, MapsActivity.class));
+            finish();
         }
     }
 
@@ -69,8 +73,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         if (view.getId() == R.id.sign_up_buton) {
             final String emailText = email.getText().toString().trim();
             final String passwordText = password.getText().toString().trim();
-            if (emailText != null && passwordText != null
+            if(passwordText.length()<6){
+                Toast.makeText(this, "Password should be of atleast 6 characters!", Toast.LENGTH_SHORT).show();
+            }
+            else if (emailText != null && passwordText != null
                     && passwordText.equals(confirmPassword.getText().toString().trim())) {
+                progressBar.setVisibility(View.VISIBLE);
                 mAuth.createUserWithEmailAndPassword(emailText, passwordText)
                         .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                             @Override
@@ -90,21 +98,35 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void aVoid) {
+                                                    progressBar.setVisibility(View.GONE);
                                                     startActivity(new Intent(SignUp.this, MapsActivity.class));
+                                                    finish();
                                                 }
                                             })
                                             .addOnFailureListener(new OnFailureListener() {
                                                 @Override
                                                 public void onFailure(@NonNull Exception e) {
+                                                    progressBar.setVisibility(View.GONE);
                                                     Toast.makeText(SignUp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                                                 }
                                             });
                                 }
                                 else{
-                                    Log.d(TAG, "onComplete: " + task.getException());
+                                    progressBar.setVisibility(View.GONE);
+                                    Toast.makeText(SignUp.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
                                 }
                             }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                progressBar.setVisibility(View.GONE);
+                                Toast.makeText(SignUp.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            }
                         });
+            }
+            else if(emailText != null && passwordText != null){
+                Toast.makeText(this, "Both the passwords should match!", Toast.LENGTH_SHORT).show();
             }
         }
         else{

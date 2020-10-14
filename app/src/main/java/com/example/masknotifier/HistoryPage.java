@@ -7,6 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.masknotifier.model.HistoryData;
@@ -29,6 +32,9 @@ public class HistoryPage extends AppCompatActivity {
     private static final String TAG = "History Page";
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
+    private ProgressBar progressBar;
+    private TextView emptyText;
+
     private RecyclerView recyclerView;
     private RecyclerViewAdapter recyclerViewAdapter;
 
@@ -40,6 +46,8 @@ public class HistoryPage extends AppCompatActivity {
         setContentView(R.layout.activity_history_page);
         Objects.requireNonNull(this.getSupportActionBar()).hide();
 
+        progressBar = findViewById(R.id.history_progress_bar);
+        emptyText = findViewById(R.id.empty_textView);
         recyclerView = findViewById(R.id.history_recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -47,6 +55,8 @@ public class HistoryPage extends AppCompatActivity {
         String uid = UserDetails.getUserInstance().getUid();
 
         Log.d(TAG, "onCreate: " + uid);
+
+        progressBar.setVisibility(View.VISIBLE);
 
         db.collection("userHistory")
                 .document(uid)
@@ -66,7 +76,11 @@ public class HistoryPage extends AppCompatActivity {
                             }
                             index -= 1;
                         }
+                        progressBar.setVisibility(View.GONE);
                         Log.d(TAG, "onSuccess: size " + historyDataList.size());
+                        if(historyDataList.size() == 0){
+                            emptyText.setVisibility(View.VISIBLE);
+                        }
                         recyclerViewAdapter = new RecyclerViewAdapter(HistoryPage.this, historyDataList);
                         recyclerView.setAdapter(recyclerViewAdapter);
                     }
@@ -74,6 +88,7 @@ public class HistoryPage extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(HistoryPage.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });

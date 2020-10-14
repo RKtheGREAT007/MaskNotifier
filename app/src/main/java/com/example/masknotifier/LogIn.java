@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
     private TextView email, password;
     private Button signUp, logIn;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
 
         mAuth = FirebaseAuth.getInstance();
 
+        progressBar = findViewById(R.id.login_progress_bar);
         email = findViewById(R.id.login_email_editText);
         password = findViewById(R.id.login_password_editText);
         signUp = findViewById(R.id.login_sign_up_buton);
@@ -47,6 +50,7 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if(view.getId() == R.id.login_login_button) {
+            progressBar.setVisibility(View.VISIBLE);
             mAuth.signInWithEmailAndPassword(email.getText().toString().trim(), password.getText().toString().trim())
                     .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -54,8 +58,11 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                             if (task.isSuccessful()) {
                                 UserDetails.getUserInstance().setUid(mAuth.getCurrentUser().getUid());
                                 Toast.makeText(LogIn.this, "Loged In", Toast.LENGTH_SHORT).show();
+                                progressBar.setVisibility(View.GONE);
                                 startActivity(new Intent(LogIn.this, HomePage.class));
+                                finish();
                             } else {
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(LogIn.this, (CharSequence) task.getException(), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -63,7 +70,8 @@ public class LogIn extends AppCompatActivity implements View.OnClickListener {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(LogIn.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
+                            Toast.makeText(LogIn.this, "Login Failed, Invalid email or password!", Toast.LENGTH_SHORT).show();
                         }
                     });
         }

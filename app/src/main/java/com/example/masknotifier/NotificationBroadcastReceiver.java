@@ -49,6 +49,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             Map<String, Object> mp = documentSnapshot.getData();
                             int index = Integer.parseInt((String) Objects.requireNonNull(mp.get("index")));
+                            index--;
                             Map<String, Object> obj = new HashMap<>();
                             if("okay".equals(whichAction)) {
                                 obj.put("reply" + String.valueOf(index), "Remembered");
@@ -64,16 +65,22 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
-                                            Toast.makeText(context, "Reply noted", Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(context, "Reply noted!", Toast.LENGTH_SHORT).show();
                                             NotificationManagerCompat.from(context).cancel(1000);
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Log.d(TAG, "onFailure: " + e.getMessage());
+                                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(context, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
         }

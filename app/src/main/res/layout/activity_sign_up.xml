@@ -107,4 +107,14 @@
         app:layout_constraintTop_toBottomOf="@+id/signup_extraText"
         app:layout_constraintVertical_bias="0.0" />
 
+    <ProgressBar
+        android:id="@+id/sign_up_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/signup_extraText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_buton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

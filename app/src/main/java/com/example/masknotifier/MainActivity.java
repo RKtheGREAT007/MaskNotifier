@@ -23,7 +23,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ImageButton nextButton, prevButton;
     private Button signUpButton;
-    private FloatingActionButton fab;
     private TextView titleTextView, descriptionTextView;
     private int currentPage = 0;
     private int[] title = new int[3];
@@ -41,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nextButton = findViewById(R.id.next_button);
         prevButton = findViewById(R.id.previous_button);
         signUpButton = findViewById(R.id.sign_up_button);
-        fab = findViewById(R.id.fab_next);
         titleTextView = findViewById(R.id.title_textView);
         descriptionTextView = findViewById(R.id.description_textView);
 
@@ -54,7 +52,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         nextButton.setOnClickListener(this);
         prevButton.setOnClickListener(this);
         signUpButton.setOnClickListener(this);
-        fab.setOnClickListener(this);
     }
 
 
@@ -62,13 +59,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch(view.getId()){
             case R.id.next_button:
-            case R.id.fab_next:
                 titleTextView.setText(title[currentPage+1]);
                 descriptionTextView.setText(description[currentPage+1]);
                 currentPage++;
                 if(currentPage==2){
                     nextButton.setVisibility(GONE);
-                    fab.setVisibility(GONE);
                     signUpButton.setVisibility(View.VISIBLE);
                 }
                 else if(currentPage==1){
@@ -82,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if(currentPage==1){
                     nextButton.setVisibility(View.VISIBLE);
                     signUpButton.setVisibility(GONE);
-                    fab.setVisibility(View.VISIBLE);
                 }
                 else if(currentPage==0){
                     prevButton.setVisibility(GONE);
@@ -102,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             UserDetails userDetails = UserDetails.getUserInstance();
             userDetails.setUid(mAuth.getCurrentUser().getUid());
             startActivity(new Intent(this, HomePage.class));
+            finish();
         }
     }
 }

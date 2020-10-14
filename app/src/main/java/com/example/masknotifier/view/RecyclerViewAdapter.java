@@ -72,12 +72,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 int ind = 0, cnt = 0;
                                 int lst = Integer.parseInt((String) documentSnapshot.get("index"));
                                 while(ind != lst){
-                                    if(cnt==position){
-                                        ind++;
-                                        cnt++;
-                                        continue;
-                                    }
                                     if(documentSnapshot.contains("reply"+String.valueOf(ind))){
+                                        if(cnt==position){
+                                            ind++;
+                                            cnt++;
+                                            continue;
+                                        }
                                         mp.put("reply"+String.valueOf(ind),documentSnapshot.get("reply"+String.valueOf(ind)));
                                         mp.put("timeStamp"+String.valueOf(ind),documentSnapshot.get("timeStamp"+String.valueOf(ind)));
                                         cnt++;
