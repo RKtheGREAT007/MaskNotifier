@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -56,6 +57,7 @@ import java.util.Objects;
 public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapClickListener, OnMapReadyCallback, View.OnClickListener {
 
     private static final String TAG = "MapsActivity";
+    public static final String MASK_NOTIFIER_PREFERENCE = "MaskNotifierPreference";
     private SeekBar seekBar;
     private TextView radiusTextView;
     private double latitude, longitude;
@@ -65,15 +67,13 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
     private GeofencingClient geofencingClient;
     private GeofenceHelper geofenceHelper;
 
-    private FirebaseAuth mAuth;
-    private FirebaseUser currentUser;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
     private double GEOFENCE_RADIUS = 0;
     private String GEOFENCE_ID = "SOME_GEOFENCE_ID";
 
     private int FINE_LOCATION_ACCESS_REQUEST_CODE = 10001;
     private int BACKGROUND_LOCATION_ACCESS_REQUEST_CODE = 10002;
+
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         geofencingClient = LocationServices.getGeofencingClient(this);
         geofenceHelper = new GeofenceHelper(this);
 
-        mAuth = FirebaseAuth.getInstance();
+        sharedPreferences = getSharedPreferences(MASK_NOTIFIER_PREFERENCE, MODE_PRIVATE);
 
         continueButton.setOnClickListener(this);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -136,12 +136,6 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
 
             }
         });
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        currentUser = mAuth.getCurrentUser();
     }
 
     private void handleMapClick(LatLng latLng){
@@ -193,7 +187,7 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
         mMap = map;
 
         enableUserLocation();
-
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(21.5077, 70.4562), 16));
         mMap.setOnMapClickListener(this);
     }
@@ -243,27 +237,15 @@ public class MapsActivity extends FragmentActivity implements GoogleMap.OnMapCli
                     Toast.makeText(geofenceHelper, "Set the Geofence to continue", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Map<String, Object> pointObj = new HashMap<>();
-                    pointObj.put("latitude", latitude);
-                    pointObj.put("longitude", longitude);
-                    db.collection("userPoints")
-                            .document(currentUser.getUid())
-                            .set(pointObj)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    addGeofence(new LatLng(latitude, longitude), GEOFENCE_RADIUS);
-                                    Intent intent = new Intent(MapsActivity.this, HomePage.class);
-                                    startActivity(intent);
-                                    finish();
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(MapsActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putFloat("latitude", (float) latitude);
+                    editor.putFloat("longitude", (float) longitude);
+                    editor.putFloat("radius", (float) GEOFENCE_RADIUS);
+                    editor.commit();
+                    addGeofence(new LatLng(latitude, longitude), GEOFENCE_RADIUS);
+                    Intent intent = new Intent(MapsActivity.this, HomePage.class);
+                    startActivity(intent);
+                    finish();
                 }
                 break;
         }

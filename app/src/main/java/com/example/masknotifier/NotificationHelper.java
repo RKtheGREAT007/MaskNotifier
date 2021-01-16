@@ -34,6 +34,8 @@ public class NotificationHelper extends ContextWrapper {
     private static final String TAG = "NotificationHelper";
     private static final int ID = 1000;
 
+    private DBHelper dbHelper = new DBHelper(this);
+
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public NotificationHelper(Context base) {
@@ -77,35 +79,9 @@ public class NotificationHelper extends ContextWrapper {
                     .addAction(R.drawable.ic_launcher_background, "Okay", makePendingIntent("okay"))
                     .build();
 
-            db.collection("userHistory")
-                    .document(UserDetails.getUserInstance().getUid())
-                    .get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Map<String, Object> mp = documentSnapshot.getData();
-                            int index = Integer.parseInt((String) Objects.requireNonNull(mp.get("index")));
-                            Map<String, Object> obj = new HashMap<>();
-                            obj.put("reply" + String.valueOf(index), "Forgot");
-                            obj.put("timeStamp" + String.valueOf(index), Calendar.getInstance().getTime().toString());
-                            obj.put("index", String.valueOf(index+1));
-                            db.collection("userHistory")
-                                    .document(UserDetails.getUserInstance().getUid())
-                                    .update(obj)
-                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                        @Override
-                                        public void onSuccess(Void aVoid) {
-
-                                        }
-                                    })
-                                    .addOnFailureListener(new OnFailureListener() {
-                                        @Override
-                                        public void onFailure(@NonNull Exception e) {
-                                            Toast.makeText(NotificationHelper.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                        }
-                    });
+//            if(!dbHelper.insertHistory("Forgot", Calendar.getInstance().getTime().toString())) {
+//                Log.d(TAG, "sendHighPriorityNotification: Failed to add data");
+//            }
         }
         else {
             notification = new NotificationCompat.Builder(this, CHANNEL_ID)

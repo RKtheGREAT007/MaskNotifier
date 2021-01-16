@@ -3,6 +3,7 @@ package com.example.masknotifier;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -19,14 +20,15 @@ import static android.view.View.GONE;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FirebaseAuth mAuth;
-
     private ImageButton nextButton, prevButton;
-    private Button signUpButton;
+    private Button letsGetStartedButton;
     private TextView titleTextView, descriptionTextView;
     private int currentPage = 0;
     private int[] title = new int[3];
     private int[] description = new int[3];
+
+    public static final String MASK_NOTIFIER_PREFERENCE = "MaskNotifierPreference";
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +37,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Objects.requireNonNull(this.getSupportActionBar()).hide();
 
-        mAuth = FirebaseAuth.getInstance();
-
         nextButton = findViewById(R.id.next_button);
         prevButton = findViewById(R.id.previous_button);
-        signUpButton = findViewById(R.id.sign_up_button);
         titleTextView = findViewById(R.id.title_textView);
+        letsGetStartedButton = findViewById(R.id.get_started_button);
         descriptionTextView = findViewById(R.id.description_textView);
+
+        sharedPreferences = getSharedPreferences(MASK_NOTIFIER_PREFERENCE, MODE_PRIVATE);
+
+        if(sharedPreferences.contains("radius")) {
+            startActivity(new Intent(this, HomePage.class));
+        }
 
         title[0] = R.string.title_1;
         title[1] = R.string.title_2;
@@ -51,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         description[2] = R.string.description_3;
         nextButton.setOnClickListener(this);
         prevButton.setOnClickListener(this);
-        signUpButton.setOnClickListener(this);
+        letsGetStartedButton.setOnClickListener(this);
     }
 
 
@@ -64,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 currentPage++;
                 if(currentPage==2){
                     nextButton.setVisibility(GONE);
-                    signUpButton.setVisibility(View.VISIBLE);
+                    letsGetStartedButton.setVisibility(View.VISIBLE);
                 }
                 else if(currentPage==1){
                     prevButton.setVisibility(View.VISIBLE);
@@ -76,15 +82,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 currentPage--;
                 if(currentPage==1){
                     nextButton.setVisibility(View.VISIBLE);
-                    signUpButton.setVisibility(GONE);
+                    letsGetStartedButton.setVisibility(GONE);
                 }
                 else if(currentPage==0){
                     prevButton.setVisibility(GONE);
                 }
                 break;
-            case R.id.sign_up_button:
+            case R.id.get_started_button:
                 //todo: goto next activity
-                startActivity(new Intent(this, SignUp.class));
+                startActivity(new Intent(this, MapsActivity.class));
                 break;
         }
     }
@@ -92,11 +98,5 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onStart() {
         super.onStart();
-        if(mAuth.getCurrentUser()!=null){
-            UserDetails userDetails = UserDetails.getUserInstance();
-            userDetails.setUid(mAuth.getCurrentUser().getUid());
-            startActivity(new Intent(this, HomePage.class));
-            finish();
-        }
     }
 }
