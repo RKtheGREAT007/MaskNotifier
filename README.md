@@ -1,6 +1,6 @@
 # MaskNotifier
 
-Sends notification when the device goes out and enter the home territory. And also history of your responses can be view.
+Sends notification when the device goes out and enter the home territory. History of your responses can be viewed.
 
 ## How it works
 
